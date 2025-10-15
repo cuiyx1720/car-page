@@ -1,0 +1,15 @@
+{
+  "name": "进校码",
+  "short_name": "进校码",
+  "start_url": "/car-page/index.html",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
+  "icons": [
+    {
+      "src": "jinxiaoma.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
