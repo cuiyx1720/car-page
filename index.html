@@ -5,81 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>实时进校码</title>
 
-  <!-- iOS 全屏/PWA -->
+  <!-- iOS 全屏支持 -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="进校码" />
   <link rel="apple-touch-icon" href="./jinxiaoma.png" />
 
   <style>
-    /* ============== 基础 ============== */
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
       width: 100%;
+      height: 100%;
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      /* 用接近背景边缘的蓝色，避免黑边感 */
-      background-color: #0b4da2;
+      background-color: #0b4da2; /* 蓝色防止黑边 */
     }
 
-    /* ============== 背景容器 ============== */
     #background-container {
       position: fixed;
-      inset: 0;                    /* 顶、右、底、左全贴边 */
-      height: 100dvh;              /* 关键：动态视口高度，避免iOS工具栏造成空隙 */
-      /* 根据需要微调整体下移的程度：正值越大越靠下 */
-      --shift: 7vh;
-
+      top: 0;
+      left: 0;
+      width: 100%;
       background-image: url('./jinxiaoma.png');
       background-repeat: no-repeat;
-      background-size: contain;    /* 保证整张证件图完整显示 */
-      background-position: center calc(50% + var(--shift));
-      /* 底色同样设为蓝色，图片比例不一致时看起来更自然 */
+      background-size: contain; /* 保证完整显示 */
+      background-position: center center; /* 默认居中 */
       background-color: #0b4da2;
-
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    /* 内容层（覆盖在图上的文字） */
     .content-wrapper {
-      position: relative;
       width: 100%;
       height: 100%;
       max-width: 450px;
+      position: relative;
     }
 
-    /* 中部时间 */
     #center-clock {
       position: absolute;
       top: 47%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: #000;
+      color: black;
       font-size: 1.4rem;
       font-weight: bold;
-      white-space: nowrap;
       text-align: center;
+      white-space: nowrap;
     }
 
-    /* 左下角日期 */
     #bottom-left-date {
       position: absolute;
       bottom: 6.2%;
       left: 40%;
       transform: translate(-50%, -50%);
-      color: #fff;
+      color: white;
       font-size: 1.1rem;
       font-weight: 500;
       white-space: nowrap;
-    }
-
-    /* 大屏或 Pro Max 机型，略增下移量，让画面更居中 */
-    @media (min-height: 800px) {
-      #background-container { --shift: 9vh; }
     }
   </style>
 </head>
@@ -93,25 +78,10 @@
   </div>
 
   <script>
-    function updateTime() {
-      const now = new Date();
-      const pad = (n) => n.toString().padStart(2, "0");
-
-      const year = now.getFullYear();
-      const month = pad(now.getMonth() + 1);
-      const day = pad(now.getDate());
-      const hours = pad(now.getHours());
-      const minutes = pad(now.getMinutes());
-      const seconds = pad(now.getSeconds());
-
-      document.getElementById("center-clock").textContent =
-        `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
-
-      document.getElementById("bottom-left-date").textContent = `${month}-${day}`;
+    // ===== 动态设置视口真实高度，避免 iOS 底部黑边 =====
+    function setFullHeight() {
+      const vh = window.innerHeight * 0.01;
+      document.getElementById('background-container').style.height = `${vh * 100}px`;
     }
-
-    updateTime();
-    setInterval(updateTime, 1000);
-  </script>
-</body>
-</html>
+    window.addEventListener('resize', setFullHeight);
+    window.addEventListener('
