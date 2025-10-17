@@ -19,20 +19,24 @@
       height: 100%;
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background-color: #0b4da2; /* 背景与图像外框一致 */
+      background-color: #0b4da2;
     }
 
-    /* 背景容器 */
+    /* 背景容器，贴底显示 */
     #background-container {
       position: fixed;
-      top: 0;
       left: 0;
-      width: 100%;
+      right: 0;
+      bottom: 0;
+      height: 100dvh; /* 动态视口高度 */
       background-image: url('./jinxiaoma.png');
       background-repeat: no-repeat;
-      background-size: contain;      /* 保证图片完整显示 */
-      background-position: center bottom; /* ✅ 关键：图片底部对齐 */
+      background-size: cover;          /* ✅ 铺满，裁掉上边黑边 */
+      background-position: center bottom; /* ✅ 底部对齐 */
       background-color: #0b4da2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .content-wrapper {
@@ -76,16 +80,16 @@
   </div>
 
   <script>
-    // === 关键：动态计算真实窗口高度（防止底部黑边） ===
-    function setFullHeight() {
+    // === 动态修正真实高度，防止iOS顶部遮挡 ===
+    function fixHeight() {
       const vh = window.innerHeight * 0.01;
       document.getElementById('background-container').style.height = `${vh * 100}px`;
     }
-    window.addEventListener('resize', setFullHeight);
-    window.addEventListener('orientationchange', setFullHeight);
-    setFullHeight();
+    window.addEventListener('resize', fixHeight);
+    window.addEventListener('orientationchange', fixHeight);
+    fixHeight();
 
-    // === 实时时间显示 ===
+    // === 时间更新 ===
     function updateTime() {
       const now = new Date();
       const pad = (n) => n.toString().padStart(2, "0");
